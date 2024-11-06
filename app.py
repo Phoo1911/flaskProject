@@ -16,7 +16,7 @@ def add_transaction():
     type = request.form['transaction_type']
     description = request.form['transaction_description']
 
-    # Add the transaction (you can replace this with your DB logic)
+    # Add the transaction )
     transactions.append({'amount': amount, 'type': type, 'description': description})
 
     flash('Transaction added successfully!', 'success')  # Flash message
