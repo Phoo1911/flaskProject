@@ -3,12 +3,12 @@ class Transaction:
         self.transaction_id = transaction_id
         self.amount = amount
         self.transaction_type = transaction_type
-        self.description = description  # Ensure description is handled
+        self.description = description  
 
     def to_dict(self):
         return {
             'transaction_id': self.transaction_id,
             'amount': self.amount,
             'type': self.transaction_type,
-            'description': self.description  # Ensure description is included
+            'description': self.description  
         }
