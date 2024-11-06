@@ -1,10 +1,148 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transaction Management</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        h2 {
+            color: #444;
+            margin-top: 30px;
+        }
+        form {
+            margin-bottom: 15px;
+            padding: 7px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+        }
+        th, td {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #f0f0f0;
+        }
+        input, select {
+            padding: 10px;
+            margin-right: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: calc(33% - 22px);
+        }
+        button {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: #28a745;
+            color: white;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        .delete-button {
+            background-color: transparent; /* No background */
+            padding: 3px 8px; /* Smaller padding */
+            font-size: 12px; /* Smaller font size */
+            color: #dc3545; /* Red text color */
+            border: none; /* No border */
+            cursor: pointer; /* Pointer cursor on hover */
+}
+
+
+        /* Flash message styles */
+        .flash-message {
+            padding: 10px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+    </style>
 </head>
 <body>
-$END$
+
+<h1>Transaction Management</h1>
+
+<!-- Flash messages -->
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        <ul>
+        {% for category, message in messages %}
+            <li class="flash-message {{ category }}">{{ message }}</li>
+        {% endfor %}
+        </ul>
+    {% endif %}
+{% endwith %}
+
+<h2>Add Transaction</h2>
+<form method="POST" action="{{ url_for('add_transaction') }}">
+    <input type="number" name="transaction_amount" required placeholder="Enter transaction amount" step="0.01" min="0">
+    <select name="transaction_type" required>
+        <option value="" disabled selected>Select transaction type</option>
+        <option value="Income">Income</option>
+        <option value="Expense">Expense</option>
+    </select>
+    <input type="text" name="transaction_description" required placeholder="Enter transaction description">
+    <button type="submit">Add</button>
+</form>
+
+<h2>Your Transactions</h2>
+<table>
+    <thead>
+        <tr>
+            <th>Amount</th>
+            <th>Type</th>
+            <th>Description</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for transaction in transactions %}
+            <tr>
+                <td>{{ transaction.amount }}</td>
+                <td>{{ transaction.type }}</td>
+                <td>{{ transaction.description }}</td>
+                <td>
+                   <form method="POST" action="{{ url_for('delete_transaction', transaction_id=loop.index0) }}" style="display:inline;">
+                       <button type="submit" class="delete-button">Delete</button>
+                   </form>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4">No transactions found.</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
 </body>
 </html>
+
+
